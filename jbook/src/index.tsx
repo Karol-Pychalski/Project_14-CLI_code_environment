@@ -4,12 +4,12 @@ import { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { unpkgPathPlugin } from './plugins/unpkg-path-plugin';
 import { fetchPlugin } from './plugins/fetch-plugin';
+import CodeEditor from './components/code-editor';
 
 const App = () => {
   const ref = useRef<any>();
   const iframe = useRef<any>();
   const [input, setInput] = useState('');
-  const [code, setCode] = useState('');
 
   const startService = async () => {
     ref.current = await esbuild.startService({
@@ -25,6 +25,9 @@ const App = () => {
     if (!ref.current) {
       return;
     }
+
+    //to avoid deleting the id="root" by user in the app (video 116):
+    iframe.current.srcdoc = html;
 
     //entire boundling process:
     const result = await ref.current.build({
@@ -42,6 +45,7 @@ const App = () => {
     iframe.current.contentWindow.postMessage(result.outputFiles[0].text, '*');
   };
 
+  //adding code to highlight errors (try catch) - video 114
   const html = `
     <html>
       <head></head>
@@ -63,8 +67,10 @@ const App = () => {
   `;
 
   //adding iframe with sandbox to increase security level of the application [video 108]
+  //jsx block:
   return (
     <div>
+      <CodeEditor />
       <textarea
         value={input}
         onChange={(e) => setInput(e.target.value)}
@@ -72,8 +78,7 @@ const App = () => {
       <div>
         <button onClick={onClick}>Submit</button>
       </div>
-      <pre>{code}</pre>
-      <iframe ref={iframe} sandbox="allow-scripts" srcDoc={html} />
+      <iframe title="preview" ref={iframe} sandbox="allow-scripts" srcDoc={html} />
     </div>
   );
 };
