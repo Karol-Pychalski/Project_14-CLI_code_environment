@@ -67,10 +67,14 @@ const App = () => {
   `;
 
   //adding iframe with sandbox to increase security level of the application [video 108]
+  //onChange in CodeEditor - callback function to what a user will type (video 126) - set in code-editor.tsx in interface
   //jsx block:
   return (
     <div>
-      <CodeEditor />
+      <CodeEditor 
+        initialValue="const a=1;" 
+        onChange={(value) => setInput(value)}
+        />
       <textarea
         value={input}
         onChange={(e) => setInput(e.target.value)}
