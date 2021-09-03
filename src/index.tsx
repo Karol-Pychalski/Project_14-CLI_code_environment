@@ -1,4 +1,5 @@
 //wiedo 58:
+import 'bulmaswatch/superhero/bulmaswatch.min.css'; //video 130
 import * as esbuild from 'esbuild-wasm';
 import { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
