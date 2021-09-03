@@ -1,12 +1,14 @@
 import './code-editor.css';
+import  './syntax.css';
 import { useRef } from 'react';
 import MonacoEditor, { EditorDidMount } from '@monaco-editor/react';
 import prettier from 'prettier';
 import parser from 'prettier/parser-babel';
+import codeShift from 'jscodeshift';
+import Highlighter from 'monaco-jsx-highlighter';
 
 //installing prettier and parser - video 128
 //adding {useRef} in video 129
-
 
 interface CodeEditorProps {
   initialValue: string;
@@ -25,6 +27,20 @@ const CodeEditor: React.FC<CodeEditorProps> = ({onChange, initialValue}) => {
     });
 
     monacoEditor.getModel()?.updateOptions({tabSize: 2});
+
+    //video 132:
+    const highlighter = new Highlighter(
+      //@ts-ignore (TS is not aware we're loading Monaco to the browser, so we say: just ignore all below and don't check types)
+      window.monaco,
+      codeShift,
+      monacoEditor
+    );
+    highlighter.highLightOnDidChangeModelContent(
+      () => {},
+      () => {},
+      undefined,
+      () => {}
+    );
   };
 
   //setting of onFormatClick since video 129:
