@@ -1,4 +1,11 @@
+import { useRef } from 'react';
 import MonacoEditor, { EditorDidMount } from '@monaco-editor/react';
+import prettier from 'prettier';
+import parser from 'prettier/parser-babel';
+
+//installing prettier and parser - video 128
+//adding {useRef} in video 129
+
 
 interface CodeEditorProps {
   initialValue: string;
@@ -8,7 +15,10 @@ interface CodeEditorProps {
 //adding type to CodeEditor and options in video 125:
 //adding onEditorDidMount in video 126 - callback to get a code result of what user wrote in console (can't pass onChange to MonacoEditor due to internal limitations of Monaco as React component)
 const CodeEditor: React.FC<CodeEditorProps> = ({onChange, initialValue}) => {
+  const editorRef = useRef<any>();
+
   const onEditorDidMount: EditorDidMount = (getValue, monacoEditor) => {
+    editorRef.current = monacoEditor;
     monacoEditor.onDidChangeModelContent(() => {
       onChange(getValue());
     });
@@ -16,7 +26,27 @@ const CodeEditor: React.FC<CodeEditorProps> = ({onChange, initialValue}) => {
     monacoEditor.getModel()?.updateOptions({tabSize: 2});
   };
 
+  //setting of onFormatClick since video 129:
+  const onFormatClick = () => {
+    //get current value from editor
+    const unformatted = editorRef.current.getModel().getValue();
+
+    //format that value (everything inside Monaco Editor)
+    const formatted = prettier.format(unformatted, {
+      parser: 'babel',
+      plugins: [parser],
+      useTabs: false,
+      semi: true,
+      singleQuote: true
+    })
+
+    //set the formatted value back in the editor
+    editorRef.current.setValue(formatted);
+  }
+
   return (
+    <div>
+      <button onClick={onFormatClick}>Format</button>
     <MonacoEditor 
       editorDidMount={onEditorDidMount}
       value={initialValue}
@@ -34,6 +64,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({onChange, initialValue}) => {
         automaticLayout: true,
      }}
     />
+    </div>
   );
 };
 
