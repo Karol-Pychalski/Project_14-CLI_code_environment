@@ -39,8 +39,10 @@ const Preview: React.FC<PreviewProps> = ({code}) => {
   useEffect(() => {
     //to avoid deleting the id="root" by user in the app (video 116):
     iframe.current.srcdoc = html;
-    // setCode(result.outputFiles[0].text); - has changed to code here as Preview components is receiving prop 'code')
-    iframe.current.contentWindow.postMessage(code, '*');
+    setTimeout(() => {
+      // setCode(result.outputFiles[0].text); - has changed to code here as Preview components is receiving prop 'code')
+      iframe.current.contentWindow.postMessage(code, '*');
+    }, 50);
   }, [code]);
 
   return (
