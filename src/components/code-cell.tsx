@@ -4,16 +4,17 @@ import CodeEditor from './code-editor';
 import Preview from './preview'; //video 134
 import bundle from '../bundler';
 import Resizable from './resizable'; //video 139
-import { ResizableBox } from 'react-resizable';
 
 const CodeCell = () => {
   const [code, setCode] = useState('');
+  const [err, setErr] = useState('');
   const [input, setInput] = useState(''); //input piece of state
 
   useEffect(() => {
     const timer = setTimeout(async () => {
       const output = await bundle(input);
-      setCode(output);
+      setCode(output.code);
+      setErr(output.err);
     }, 750);
 
     return () => {
@@ -28,12 +29,12 @@ const CodeCell = () => {
     <Resizable direction="vertical">
       <div style={{ height: '100%', display: 'flex', flexDirection: 'row'}}>
         <Resizable direction="horizontal">
-        <CodeEditor 
-          initialValue="const a=1;" 
-          onChange={(value) => setInput(value)}
-        />
+          <CodeEditor 
+            initialValue="const a=1;" 
+            onChange={(value) => setInput(value)}
+          />
         </Resizable>
-        <Preview code={code} /> 
+        <Preview code={code} err={err}/> 
       </div>
     </Resizable>
   );

@@ -1,13 +1,13 @@
 //video 134:
 import './preview.css';
-import { useEffect } from 'react';
-import {useRef} from 'react';
+import { useRef, useEffect } from 'react';
 
 interface PreviewProps {
   code: string;
+  err: string;
 }
 
-//generating html code:
+//generating html code which goes directly to iFrame:
 //adding code to highlight errors (try catch) - video 114
 //adding style to html - video 151
 const html = `
@@ -18,13 +18,22 @@ const html = `
     <body>
       <div id="root"></div>
       <script>
+        const handleError = (err) => {
+          const root = document.querySelector('#root');
+          root.innerHTML = '<div style="color: red;"><h4>Runtime Error</h4>' + err + '</div>';
+          console.error(err);
+        };
+
+        window.addEventListener('error, (event) => {
+          event.preventDefault();
+          handleError(event.error);
+        });
+
         window.addEventListener('message', (event) => {
           try {
             eval(event.data);
           } cacth (err) {
-            const root = document.querySelector('#root');
-            root.innerHTML = '<div style="color: red;"><h4>Runtime Error</h4>' + err + '</div>';
-            console.error(err);
+            handleError(err);
           }
         }, false);
       </script>
@@ -33,7 +42,7 @@ const html = `
 `;
 
 //adding iframe with sandbox to increase security level of the application [video 108]
-const Preview: React.FC<PreviewProps> = ({code}) => {
+const Preview: React.FC<PreviewProps> = ({code, err}) => {
   const iframe = useRef<any>();
 
   useEffect(() => {
@@ -50,7 +59,9 @@ const Preview: React.FC<PreviewProps> = ({code}) => {
       <iframe 
         title="preview" ref={iframe} 
         sandbox="allow-scripts" 
-        srcDoc={html} />;
+        srcDoc={html} 
+      />;
+      {err && <div className="preview-error">{err}</div>}
     </div>
   );
 };
