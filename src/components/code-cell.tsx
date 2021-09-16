@@ -4,15 +4,22 @@ import CodeEditor from './code-editor';
 import Preview from './preview'; //video 134
 import bundle from '../bundler';
 import Resizable from './resizable'; //video 139
+import { Cell } from '../state'; //video 205
+import { useActions } from '../hooks/use-actions';
 
-const CodeCell = () => {
+//interface added in video 205:
+interface CodeCellProps {
+  cell: Cell;
+}
+
+const CodeCell: React.FC<CodeCellProps> = ({cell}) => { //{} inside of the brackets is a received prop
   const [code, setCode] = useState('');
   const [err, setErr] = useState('');
-  const [input, setInput] = useState(''); //input piece of state
-
+  const {updateCell} = useActions(); //piece of state
+  
   useEffect(() => {
     const timer = setTimeout(async () => {
-      const output = await bundle(input);
+      const output = await bundle(cell.content); //(input) changed in video 205
       setCode(output.code);
       setErr(output.err);
     }, 750);
@@ -20,7 +27,7 @@ const CodeCell = () => {
     return () => {
       clearTimeout(timer);
     };
-  }, [input]); //[list of dependencies] - hook useEffect runs only when input changes 
+  }, [cell.content]); //[list of dependencies] - hook useEffect runs only when input changes 
 
   //onChange in CodeEditor - callback function to what a user will type (video 126) - set in code-editor.tsx in interface
   //jsx block:
@@ -30,8 +37,8 @@ const CodeCell = () => {
       <div style={{ height: '100%', display: 'flex', flexDirection: 'row'}}>
         <Resizable direction="horizontal">
           <CodeEditor 
-            initialValue="const a=1;" 
-            onChange={(value) => setInput(value)}
+            initialValue={cell.content} 
+            onChange={(value) => updateCell(cell.id, value)}
           />
         </Resizable>
         <Preview code={code} err={err}/> 
