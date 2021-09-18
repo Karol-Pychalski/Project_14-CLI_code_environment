@@ -1,5 +1,6 @@
 //wiedo 58:
 import 'bulmaswatch/superhero/bulmaswatch.min.css'; //video 130
+import '@fortawesome/fontawesome-free/css/all.min.css'; //video 208
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux'; //video 187
 import {store} from './state'; //video 187

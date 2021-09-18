@@ -2,11 +2,19 @@
 import './text-editor.css';
 import { useState, useEffect, useRef } from "react";
 import MDEditor from "@uiw/react-md-editor";
+import {Cell} from '../state';
+import {useActions} from '../hooks/use-actions';
 
-const TextEditor: React.FC = () => {
+interface TextEditorProps { //added in video 206
+  cell: Cell;
+}
+
+//cell.content is a value where user types text into the TextEditor (field)
+
+const TextEditor: React.FC<TextEditorProps> = ({cell}) => {   //receiving cell as prop
   const ref = useRef<HTMLDivElement | null>(null); //HTMLDivElement - type annotation, (null)-default starting value
-  const [editing, setEditing] = useState(false);
-  const [value, setValue] = useState('#Header');
+  const [editing, setEditing] = useState(false);  //this will stay as a local state
+  const {updateCell} = useActions();
 
   useEffect (() => {
     const listener = (event: MouseEvent) => {
@@ -22,10 +30,11 @@ const TextEditor: React.FC = () => {
     };
   }, []);
 
+  //v || '' - v (value) is an argument with type string, if it will be undefined then empty string will be provided
   if (editing) {
     return (
       <div className="text-editor" ref={ref}>
-        <MDEditor value={value} onChange={(v) => setValue(v || '')} />
+        <MDEditor value={cell.content} onChange={(v) => updateCell(cell.id, v || '')} />  
       </div>
     );
   }
@@ -33,7 +42,7 @@ const TextEditor: React.FC = () => {
   return (
     <div className="text-editor card" onClick={() => setEditing(true)}>
       <div className="card-content">
-        <MDEditor.Markdown source={value} />
+        <MDEditor.Markdown source={cell.content || 'Click to edit'} />
       </div>
     </div>
   );
