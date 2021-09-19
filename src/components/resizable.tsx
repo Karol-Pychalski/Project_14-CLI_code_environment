@@ -2,13 +2,13 @@
 
 import './resizable.css';
 import { useEffect, useState } from 'react';
-import { ResizableBox, ResizableBoxProps } from "react-resizable";
+import { ResizableBox, ResizableBoxProps } from 'react-resizable';
 
 interface ResizableProps {
-  direction: 'horizontal' | 'vertical'
+  direction: 'horizontal' | 'vertical';
 }
 
-const Resizable: React.FC<ResizableProps> =({direction, children}) => {
+const Resizable: React.FC<ResizableProps> = ({direction, children}) => {
   let resizableProps: ResizableBoxProps;
 
   const [innerHeight, setInnerHeight] = useState(window.innerHeight);
@@ -45,7 +45,7 @@ const Resizable: React.FC<ResizableProps> =({direction, children}) => {
       minConstraints: [innerWidth * 0.2, Infinity],
       maxConstraints: [innerWidth * 0.75, Infinity],
       height: Infinity,
-      width: width, //comes from piece of state declared in const [width, setWidth]
+      width, //comes from piece of state declared in const [width, setWidth]
       resizeHandles: ['e'],
       onResizeStop: (event, data) => {  //used to avoid jumping coding field width when user changes window width
         setWidth(data.size.width);
@@ -61,11 +61,7 @@ const Resizable: React.FC<ResizableProps> =({direction, children}) => {
     };
   }
   
-  return (
-    <ResizableBox {...resizableProps}>
-      {children}
-    </ResizableBox>
-  );
+  return <ResizableBox {...resizableProps}>{children}</ResizableBox>;
 };
 
 export default Resizable;
