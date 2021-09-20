@@ -13,19 +13,20 @@ const CellList: React.FC = () => {
     order.map((id) => data[id])
   );
 
-  //Fragment added in video 213
+  //Fragment added in video 213 and modified in v. 222
   const renderedCells = cells.map((cell) => (
     <Fragment key={cell.id}>
-      <AddCell nextCellId={cell.id} />
       <CellListItem cell={cell} />
+      <AddCell previousCellId={cell.id} />
     </Fragment>
   ));
 
   //code in return shows the last row of +code and +text buttons
+  //modified in video 222
   return (
     <div>
+      <AddCell forceVisible={cells.length === 0} previousCellId={null} />
       {renderedCells}
-        <AddCell forceVisible={cells.length === 0} nextCellId={null} />
     </div>
   );
 };
