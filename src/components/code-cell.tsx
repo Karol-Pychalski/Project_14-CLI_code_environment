@@ -6,7 +6,6 @@ import Resizable from './resizable'; //video 139
 import { Cell } from '../state'; //video 205
 import { useActions } from '../hooks/use-actions';
 import { useTypedSelector } from '../hooks/use-typed-selector'; //video 229
-import { isBundle } from 'typescript';
 
 //interface added in video 205:
 interface CodeCellProps {
@@ -14,7 +13,8 @@ interface CodeCellProps {
 }
 
 //modified in video 229
-const CodeCell: React.FC<CodeCellProps> = ({cell}) => { //{} inside of the brackets is a received prop
+//{} inside of the brackets is a received prop
+const CodeCell: React.FC<CodeCellProps> = ({cell}) => {
   const { updateCell, createBundle } = useActions(); //piece of state
   const bundle = useTypedSelector((state) => state.bundles[cell.id]);
   
@@ -29,7 +29,7 @@ const CodeCell: React.FC<CodeCellProps> = ({cell}) => { //{} inside of the brack
     return () => {
       clearTimeout(timer);
     };
-  }, [cell.id, cell.content]); //[list of dependencies] - hook useEffect runs only when input changes 
+  }, [cell.id, cell.content, createBundle]); //[list of dependencies] - hook useEffect runs only when input changes 
 
   //onChange in CodeEditor - callback function to what a user will type (video 126) - set in code-editor.tsx in interface
   //jsx block:

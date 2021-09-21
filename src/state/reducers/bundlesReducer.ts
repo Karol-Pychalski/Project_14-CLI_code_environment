@@ -42,7 +42,8 @@ const reducer = produce(
       default:
         return state;
     }
-  }
+  },
+  initialState //solution from community to a problem of undefined in code-cell
 );
 
 export default reducer;
