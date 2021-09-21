@@ -5,12 +5,15 @@ import { ActionType } from '../action-types';
 import { Action } from '../actions';
 
 //BundlesState receives object as a value
+//undefined andded and explained in video 230
 interface BundlesState {
-  [key: string]: {
-    loading: boolean;
-    code: string;
-    err: string;
-  };
+  [key: string]:
+    | {
+        loading: boolean;
+        code: string;
+        err: string;
+      }
+    | undefined;
 }
 
 //defining initial state object (epmty as default)
