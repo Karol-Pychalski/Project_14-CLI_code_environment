@@ -7,6 +7,7 @@ import Resizable from './resizable'; //video 139
 import { Cell } from '../state'; //video 205
 import { useActions } from '../hooks/use-actions';
 import { useTypedSelector } from '../hooks/use-typed-selector'; //video 229
+import { ReactReduxContext } from 'react-redux';
 
 //interface added in video 205:
 interface CodeCellProps {
@@ -16,21 +17,41 @@ interface CodeCellProps {
 //modified in video 229
 //{} inside of the brackets is a received prop
 //CodeCell is a boundled component (graph in video 240)
+//cumulativeCode added in video 242 (it is an array of strings)
 const CodeCell: React.FC<CodeCellProps> = ({cell}) => {
   const { updateCell, createBundle } = useActions(); //piece of state
   const bundle = useTypedSelector((state) => state.bundles[cell.id]);
+  const cumulativeCode = useTypedSelector((state) => {
+    const { data, order } = state.cells;
+    const orderedCells = order.map(id => data[id]);
+
+    const cumulativeCode = [];
+    for (let c of orderedCells) {
+      if (c.type === 'code') {
+        cumulativeCode.push(c.content);
+      }
+      if (c.id === cell.id) {
+        break;
+      }
+    }
+    return cumulativeCode;
+  });
+
+  console.log(cumulativeCode);
   
+  //bundling process for CodeCell component (here all cells are bundled)
   //modified in video 229
-  //cell.content is actual code we want to bundle
+  //cell.content is actual code we want to bundle (changed to cumulativeCode in v.242)
   //flow of data is explained in video 230 (3:05 min)
+  // '\n' means new line (=return element in a new line)
   useEffect(() => {
     if (!bundle) {
-      createBundle(cell.id, cell.content);
+      createBundle(cell.id, cumulativeCode.join('\n'));
       return;
     }
 
     const timer = setTimeout(async () => {
-      createBundle(cell.id, cell.content)
+      createBundle(cell.id, cumulativeCode.join('\n'));
     }, 750);
 
     return () => {
@@ -38,7 +59,7 @@ const CodeCell: React.FC<CodeCellProps> = ({cell}) => {
     };
 
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cell.id, cell.content, createBundle]); //[list of dependencies] - hook useEffect runs only when input changes 
+  }, [cell.id, cumulativeCode.join('\n'), createBundle]); //[list of dependencies] - hook useEffect runs only when input changes 
 
   //onChange in CodeEditor - callback function to what a user will type (video 126) - set in code-editor.tsx in interface
   //jsx block:
