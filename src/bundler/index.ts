@@ -15,6 +15,7 @@ const bundle = async (rawCode: string) => {
     });
   }
 
+  //setup bulding service
   try {
     const result = await service.build({
       entryPoints: ['index.js'],
@@ -25,6 +26,8 @@ const bundle = async (rawCode: string) => {
         'process.env.NODE_ENV': '"production"',
         global: 'window',
       },
+      jsxFactory: '_React.createElement', //video 247
+      jsxFragment: '_React.Fragment',
     });
 
     return {
