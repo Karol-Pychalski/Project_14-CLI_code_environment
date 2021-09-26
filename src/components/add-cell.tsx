@@ -1,7 +1,7 @@
 //viedo 211, 222
 
 import './add-cell.css';
-import {useActions} from '../hooks/use-actions';
+import { useActions } from '../hooks/use-actions';
 
 // ? means it is optional (v.216)
 interface AddCellProps {
@@ -10,7 +10,7 @@ interface AddCellProps {
 };
 
 const AddCell: React.FC<AddCellProps> = ({ forceVisible, previousCellId}) => {
-  const {insertCellAfter} = useActions();
+  const { insertCellAfter } = useActions();
 
   //forceVisible explained in video 216
   //modified in video 222

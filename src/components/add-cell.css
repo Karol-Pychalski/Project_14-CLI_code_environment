@@ -15,16 +15,16 @@
   opacity: 1;
 }
 
-.add-cell.add-cell-focused {
+/* .add-cell.add-cell-focused {
   opacity: 1;
-}
+} */
 
 .add-cell .divider {
   position: absolute;
   top: 50%;
   bottom: 50%;
-  left: 2.5%;
   right: 2.5%;
+  left: 2.5%;
   border-bottom: 1px solid gray;
   width: 95%;
   z-index: -1;

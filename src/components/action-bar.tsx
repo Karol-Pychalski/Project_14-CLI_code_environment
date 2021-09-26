@@ -1,7 +1,6 @@
 //created in video 207:
 import './action-bar.css';
-import {useActions} from '../hooks/use-actions';
-
+import { useActions } from '../hooks/use-actions';
 
 interface ActionBarProps {
   id: string;

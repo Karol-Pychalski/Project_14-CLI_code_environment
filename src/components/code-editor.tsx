@@ -55,7 +55,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({onChange, initialValue}) => {
       useTabs: false,
       semi: true,
       singleQuote: true
-    }).replace(/\n$/,'');
+    }).replace(/\n$/, '');
 
     //set the formatted value back in the editor
     editorRef.current.setValue(formatted);
@@ -63,24 +63,29 @@ const CodeEditor: React.FC<CodeEditorProps> = ({onChange, initialValue}) => {
 
   return (
     <div className="editor-wrapper">
-      <button className="button button-format is-primary is-small" onClick={onFormatClick}>Format</button>
-    <MonacoEditor 
-      editorDidMount={onEditorDidMount}
-      value={initialValue}
-      theme="dark" 
-      language="javascript"
-      height="100%" 
-      options={{
-        wordWrap: 'on',
-        minimap: { enabled: false },
-        showUnused: false,
-        folding: false,
-        lineNumbersMinChars: 3,
-        fontSize: 16,
-        scrollBeyondLastLine: false,
-        automaticLayout: true,
-     }}
-    />
+      <button 
+        className="button button-format is-primary is-small" 
+        onClick={onFormatClick}
+      >
+        Format
+      </button>
+      <MonacoEditor 
+        editorDidMount={onEditorDidMount}
+        value={initialValue}
+        theme="dark" 
+        language="javascript"
+        height="100%" 
+        options={{
+          wordWrap: 'on',
+          minimap: { enabled: false },
+          showUnused: false,
+          folding: false,
+          lineNumbersMinChars: 3,
+          fontSize: 16,
+          scrollBeyondLastLine: false,
+          automaticLayout: true,
+        }}
+      />
     </div>
   );
 };
